@@ -1,39 +1,24 @@
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
-import Alert from 'react-bootstrap/Alert';
 import { Button, Form } from 'react-bootstrap'
 import { fireRegister } from '../../services/authServices'
 import { registroMessage } from '../../Utils/errorMessage';
+import { AlertNavigation } from '../template/AlertNavigation';
 
 export default function Registro() {
-
     const { register, handleSubmit, formState: {errors} } = useForm({ mode: "onChange" })
 
-    const [alert, setAlert] = useState({variant:'',text:''});
+    const [alert, setAlert] = useState({variant:'',text:'',duration:0,link:''});
 
     const onSubmit = async(data)=>{
 
         //setLoading(true);
-
         try{
-            console.log('data form:')
-            console.log(data)
-    
             const response = await fireRegister(data);
 
-            /*  
-            setAlert({
-                variant: "success",
-                text: "Usuario creado con éxito",
-                duration: 3000,
-                link: "/login"
-            })
-            setLoading(false);
-            */
-           console.log('FireRegister response:')
             console.log(response)
             setAlert({
-                variant: "succes",
+                variant: "success",
                 text: "El Usuario ha sido creado con éxito",
                 duration: 3000,
                 link: "/login"
@@ -43,8 +28,7 @@ export default function Registro() {
             setAlert({
                 variant: "danger",
                 text: registroMessage[e.code] || "Ooops... Ha ocurrido un error",
-                duration: 3000,
-                //link: "/login"
+                duration: 0
             })
             //setLoading(false);
         }
@@ -105,7 +89,7 @@ export default function Registro() {
 
         </Form>
         <br></br>
-        <Alert variant={alert.variant} > {alert.text} </Alert>
+        <AlertNavigation {...alert} />
         </div>
 
     </div>
